@@ -1,0 +1,59 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    04/17/2023  10:13:05  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\checksum.obj TO .\Objects\1 PRINT (.\Listings\1.m51)
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\checksum.obj (CHECKSUM)
+
+
+LINK MAP OF MODULE:  .\Objects\1 (CHECKSUM)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     011FH     ABSOLUTE     
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\1 (CHECKSUM)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        CHECKSUM
+  C:0113H         SYMBOL        LOOP
+  C:0107H         SYMBOL        LOOP1
+  C:010DH         SYMBOL        RESTET
+  C:0100H         SYMBOL        START
+  C:0030H         SYMBOL        TABLE
+  C:0000H         LINE#         65533
+  C:0100H         LINE#         6
+  C:0102H         LINE#         7
+  C:0104H         LINE#         8
+  C:0107H         LINE#         11
+  C:0108H         LINE#         12
+  C:0109H         LINE#         13
+  C:010AH         LINE#         14
+  C:010BH         LINE#         15
+  C:010DH         LINE#         17
+  C:010FH         LINE#         18
+  C:0111H         LINE#         19
+  C:0113H         LINE#         21
+  C:0114H         LINE#         22
+  C:0115H         LINE#         23
+  C:0117H         LINE#         25
+  C:0119H         LINE#         26
+  C:011BH         LINE#         27
+  C:011DH         LINE#         29
+  -------         ENDMOD        CHECKSUM
+
+Program Size: data=8.0 xdata=0 code=287
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

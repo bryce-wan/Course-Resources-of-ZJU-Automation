@@ -1,0 +1,62 @@
+A51 MACRO ASSEMBLER  CHECKSUM                                                             04/17/2023 10:13:05 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\checksum.obj
+ASSEMBLER INVOKED BY: D:\Keil_v5\C51\BIN\A51.EXE checksum.a51 SET(SMALL) DEBUG PRINT(.\Listings\checksum.lst) OBJECT(.\O
+                      bjects\checksum.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000 020100            1     LJMP START
+0030                   2     ORG 0030H
+0030 1B05202F          3     TABLE: DB 1BH,5H,20H,2FH,26H,0EBH,4FH,11H,0BBH,3AH,17H,23H,0D3H,68H,9H 
+0034 26EB4F11                
+0038 BB3A1723                
+003C D36809                  
+                       4             
+0100                   5     ORG 0100H
+0100 7A0F              6     START:  MOV R2,#0FH     
+0102 7830              7                     MOV R0,#30H     
+0104 900000            8                     MOV DPTR, #0000H
+                       9                     
+                      10                     
+0107 E8               11     LOOP1:  MOV A, R0
+0108 93               12                     MOVC A, @A+DPTR 
+0109 F6               13                     MOV @R0, A
+010A 08               14                     INC  R0
+010B DAFA             15                     DJNZ R2, LOOP1
+                      16                     
+010D 7A0F             17     RESTET: MOV R2,#0FH
+010F 7830             18                     MOV R0,#30H
+0111 7400             19                     MOV A,#00H
+                      20                     
+0113 26               21     LOOP:   ADD A, @R0
+0114 08               22                     INC R0  
+0115 DAFC             23                     DJNZ R2,LOOP
+                      24                     
+0117 64FF             25                     XRL A,#0FFH     
+0119 2401             26                     ADD A,#01H      
+011B F53F             27                     MOV 3FH,A
+                      28                     
+011D 80FE             29     SJMP $
+                      30     END
+A51 MACRO ASSEMBLER  CHECKSUM                                                             04/17/2023 10:13:05 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+LOOP . . . . . . .  C ADDR   0113H   A   
+LOOP1. . . . . . .  C ADDR   0107H   A   
+RESTET . . . . . .  C ADDR   010DH   A   
+START. . . . . . .  C ADDR   0100H   A   
+TABLE. . . . . . .  C ADDR   0030H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

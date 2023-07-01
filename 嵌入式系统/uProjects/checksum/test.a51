@@ -1,0 +1,34 @@
+		MIN 	EQU	3FH
+			
+		ORG		0000H
+		LJMP	MAIN
+		
+		ORG 	0030H
+TABLE: 	DB 		27,5,32,47,38,235,79,17,187,58,23,35,211,104,9
+	
+		ORG		0100H
+MAIN:	MOV 	R0,#30H			;?????
+		MOV		DPTR,#00H
+
+AGAIN:	MOV		A,R0
+		MOVC	A,@A+DPTR		;?ROM????A+DPTR?????A
+		MOV		@R0,A			;?A?????RAM????R0
+		INC		R0
+		CJNE	R0,#3FH,AGAIN
+		LJMP	FIND
+		
+FIND:	MOV		R0,#30H
+		MOV		MIN,@R0			;????????MIN
+		INC		R0
+		
+LOOP:	MOV		A,@R0
+		CLR		C
+		SUBB	A,MIN
+		JNC		NEXT			;????????,(A)>(MIN),???
+		MOV		MIN,@R0
+		
+NEXT:	INC		R0
+		CJNE	R0,#3FH,LOOP
+
+		SJMP	$
+		END

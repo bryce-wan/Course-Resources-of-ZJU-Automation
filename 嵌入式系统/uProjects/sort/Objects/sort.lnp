@@ -1,0 +1,3 @@
+".\Objects\bubble_sort.obj" 
+TO ".\Objects\sort" 
+PRINT(".\Listings\sort.m51")

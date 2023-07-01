@@ -1,0 +1,136 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              05/04/2023 23:31:45 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #define start_year 4;  // 2004
+   3          #define start_month 2; // February
+   4          #define start_day 27;  // 27th
+   5          #define start_hour 23; // 23:58:00
+   6          #define start_min 58;
+   7          #define start_sec 0;
+   8          
+   9          // no speed up
+  10          // #define counter_H 0x3c;
+  11          // #define counter_L 0xb0;
+  12          
+  13          // speed up 1000x
+  14          #define counter_H 0xff;
+  15          #define counter_L 0xce;
+  16          
+  17          struct TIME
+  18          {
+  19              unsigned char year;
+  20              unsigned char month;
+  21              unsigned char day;
+  22              unsigned char hour;
+  23              unsigned char min;
+  24              unsigned char sec;
+  25          } data time;
+  26          
+  27          // not leap year
+  28          unsigned char MONTH1[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  29          // leap year
+  30          unsigned char MONTH2[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  31          unsigned int MonthDay;
+  32          unsigned char cnt_50ms = 0;
+  33          
+  34          // judge whether the year is leap year
+  35          unsigned char is_leap_year(unsigned char year)
+  36          {
+  37   1          return ((year + 2000) % 4 == 0 && (year + 2000) % 100 != 0) || ((year + 2000) % 400 == 0);
+  38   1      }
+  39          
+  40          // timer0 initialization
+  41          void timer0_init(void)
+  42          {
+  43   1          TMOD = 0x01;     // set timer0 as mode1 (16-bit)
+  44   1          TH0 = counter_H; // initial counter values
+  45   1          TL0 = counter_L;
+  46   1          TR0 = 1; // timer0 start run
+  47   1          ET0 = 1; // enable timer0 interrupt
+  48   1          EA = 1;  // open global interrupt switch
+  49   1      }
+  50          
+  51          // timer0 interrupt service routine
+  52          void timer0_isr(void) interrupt 1
+  53          {
+  54   1          TH0 = counter_H; // reload counter values
+C51 COMPILER V9.60.7.0   MAIN                                                              05/04/2023 23:31:45 PAGE 2   
+
+  55   1          TL0 = counter_L;
+  56   1          cnt_50ms++;
+  57   1      
+  58   1          if (cnt_50ms == 20)
+  59   1          {
+  60   2              cnt_50ms = 0;
+  61   2              time.sec++;
+  62   2              if (time.sec == 60)
+  63   2              {
+  64   3                  time.sec = 0;
+  65   3                  time.min++;
+  66   3                  if (time.min == 60)
+  67   3                  {
+  68   4                      time.min = 0;
+  69   4                      time.hour++;
+  70   4                      if (time.hour == 24)
+  71   4                      {
+  72   5                          time.hour = 0;
+  73   5                          time.day++;
+  74   5                          if (is_leap_year(time.year))
+  75   5                              MonthDay = MONTH2[time.month - 1];
+  76   5                          else
+  77   5                              MonthDay = MONTH1[time.month - 1];
+  78   5      
+  79   5                          if (time.day == MonthDay + 1)
+  80   5                          {
+  81   6                              time.day = 1;
+  82   6                              time.month++;
+  83   6                              if (time.month == 13)
+  84   6                              {
+  85   7                                  time.month = 1;
+  86   7                                  time.year++;
+  87   7                              }
+  88   6                          }
+  89   5                      }
+  90   4                  }
+  91   3              }
+  92   2          }
+  93   1      }
+  94          
+  95          void main(void)
+  96          {
+  97   1          // initialize time
+  98   1          time.year = start_year;
+  99   1          time.month = start_month;
+ 100   1          time.day = start_day;
+ 101   1          time.hour = start_hour;
+ 102   1          time.min = start_min;
+ 103   1          time.sec = start_sec;
+ 104   1      
+ 105   1          timer0_init();
+ 106   1          while (1)
+ 107   1              ;
+ 108   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    241    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     33    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              05/04/2023 23:31:45 PAGE 3   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

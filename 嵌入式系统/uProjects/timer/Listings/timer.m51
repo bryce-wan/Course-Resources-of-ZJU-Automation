@@ -1,0 +1,168 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    05/04/2023  23:31:45  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\main.obj TO .\Objects\timer PRINT (.\Listings\timer.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?UIDIV)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\timer (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0021H     UNIT         ?DT?MAIN
+            IDATA   0029H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     0091H     UNIT         ?PR?TIMER0_ISR?MAIN
+            CODE    009FH     008CH     UNIT         ?C_C51STARTUP
+            CODE    012BH     0055H     UNIT         ?C?LIB_CODE
+            CODE    0180H     0039H     UNIT         ?PR?_IS_LEAP_YEAR?MAIN
+            CODE    01B9H     0020H     UNIT         ?C_INITSEG
+            CODE    01D9H     0017H     UNIT         ?PR?MAIN?MAIN
+            CODE    01F0H     0010H     UNIT         ?PR?TIMER0_INIT?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\timer (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?PR?TIMER0_ISR?MAIN
+  +--> ?PR?_IS_LEAP_YEAR?MAIN
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN
+  +--> ?PR?TIMER0_INIT?MAIN
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/04/2023  23:31:45  PAGE 2
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\timer (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:000EH         PUBLIC        timer0_isr
+  B:00A8H.7       PUBLIC        EA
+  C:01D9H         PUBLIC        main
+  D:0008H         PUBLIC        MonthDay
+  D:000AH         PUBLIC        time
+  D:0089H         PUBLIC        TMOD
+  D:0010H         PUBLIC        MONTH1
+  D:001CH         PUBLIC        MONTH2
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  C:01F0H         PUBLIC        timer0_init
+  D:0028H         PUBLIC        cnt_50ms
+  C:0180H         PUBLIC        _is_leap_year
+  -------         PROC          _IS_LEAP_YEAR
+  D:0003H         SYMBOL        year
+  C:0180H         LINE#         35
+  C:0182H         LINE#         36
+  C:0182H         LINE#         37
+  C:01B8H         LINE#         38
+  -------         ENDPROC       _IS_LEAP_YEAR
+  -------         PROC          TIMER0_INIT
+  C:01F0H         LINE#         41
+  C:01F0H         LINE#         42
+  C:01F0H         LINE#         43
+  C:01F3H         LINE#         44
+  C:01F6H         LINE#         45
+  C:01F9H         LINE#         46
+  C:01FBH         LINE#         47
+  C:01FDH         LINE#         48
+  C:01FFH         LINE#         49
+  -------         ENDPROC       TIMER0_INIT
+  -------         PROC          TIMER0_ISR
+  C:000EH         LINE#         52
+  C:0023H         LINE#         54
+  C:0026H         LINE#         55
+  C:0029H         LINE#         56
+  C:002BH         LINE#         58
+  C:0031H         LINE#         59
+  C:0031H         LINE#         60
+  C:0033H         LINE#         61
+  C:0035H         LINE#         62
+  C:003BH         LINE#         63
+  C:003BH         LINE#         64
+  C:003DH         LINE#         65
+  C:003FH         LINE#         66
+  C:0045H         LINE#         67
+  C:0045H         LINE#         68
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/04/2023  23:31:45  PAGE 3
+
+
+  C:0047H         LINE#         69
+  C:0049H         LINE#         70
+  C:004FH         LINE#         71
+  C:004FH         LINE#         72
+  C:0051H         LINE#         73
+  C:0053H         LINE#         74
+  C:005BH         LINE#         75
+  C:005FH         LINE#         77
+  C:006AH         LINE#         79
+  C:007DH         LINE#         80
+  C:007DH         LINE#         81
+  C:0080H         LINE#         82
+  C:0082H         LINE#         83
+  C:0087H         LINE#         84
+  C:0087H         LINE#         85
+  C:008AH         LINE#         86
+  C:008CH         LINE#         87
+  C:008CH         LINE#         88
+  C:008CH         LINE#         89
+  C:008CH         LINE#         90
+  C:008CH         LINE#         91
+  C:008CH         LINE#         92
+  C:008CH         LINE#         93
+  -------         ENDPROC       TIMER0_ISR
+  -------         PROC          MAIN
+  C:01D9H         LINE#         95
+  C:01D9H         LINE#         96
+  C:01D9H         LINE#         98
+  C:01DCH         LINE#         99
+  C:01DFH         LINE#         100
+  C:01E2H         LINE#         101
+  C:01E5H         LINE#         102
+  C:01E8H         LINE#         103
+  C:01EBH         LINE#         105
+  C:01EEH         LINE#         106
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        ?C?UIDIV
+  C:012BH         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+Program Size: data=42.0 xdata=0 code=504
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,94 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    04/11/2023  13:25:17  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\bubble_sort.obj TO .\Objects\sort PRINT (.\Listings\sort.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\bubble_sort.obj (BUBBLE_SORT)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?COPY)
+
+
+LINK MAP OF MODULE:  .\Objects\sort (BUBBLE_SORT)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000FH     UNIT         _DATA_GROUP_
+            IDATA   0017H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     00F6H     UNIT         ?C?LIB_CODE
+            CODE    00F9H     0078H     UNIT         ?PR?MAIN?BUBBLE_SORT
+            CODE    0171H     000FH     UNIT         ?CO?BUBBLE_SORT
+            CODE    0180H     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\sort (BUBBLE_SORT)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?BUBBLE_SORT
+
+?PR?MAIN?BUBBLE_SORT           0008H    000FH
+  +--> ?CO?BUBBLE_SORT
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\sort (BUBBLE_SORT)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        BUBBLE_SORT
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:00F9H         PUBLIC        main
+  C:0171H         SYMBOL        _?ix1000
+  -------         PROC          MAIN
+  -------         DO            
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/11/2023  13:25:17  PAGE 2
+
+
+  D:0008H         SYMBOL        A
+  D:0006H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:00F9H         LINE#         3
+  C:00F9H         LINE#         4
+  C:00F9H         LINE#         5
+  C:010CH         LINE#         7
+  C:010FH         LINE#         9
+  C:010FH         LINE#         10
+  C:010FH         LINE#         11
+  C:011FH         LINE#         12
+  C:011FH         LINE#         13
+  C:012FH         LINE#         14
+  C:012FH         LINE#         15
+  C:0136H         LINE#         16
+  C:014AH         LINE#         17
+  C:015EH         LINE#         18
+  C:015EH         LINE#         19
+  C:0165H         LINE#         20
+  C:0170H         LINE#         21
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        BUBBLE_SORT
+
+  -------         MODULE        ?C?COPY
+  C:00D3H         PUBLIC        ?C?COPY
+  -------         ENDMOD        ?C?COPY
+
+Program Size: data=24.0 xdata=0 code=396
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

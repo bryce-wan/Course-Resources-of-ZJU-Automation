@@ -1,0 +1,432 @@
+C51 COMPILER V9.60.7.0   KEYBOARD                                                          05/11/2023 00:08:33 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE KEYBOARD
+OBJECT MODULE PLACED IN .\Objects\keyboard.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE keyboard.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -keyboard.lst) OBJECT(.\Objects\keyboard.obj)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          
+   3          #define num_mode 0
+   4          #define time_mode 1
+   5          
+   6          typedef unsigned int u16;
+   7          typedef unsigned char u8;
+   8          
+   9          u8 code smgduan[17] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07,
+  10                                 0x7f, 0x6f, 0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71}; //
+  11          u8 mode = 0;
+  12          int KeyValue[4] = {3, 0, 2, 0};
+  13          int KeyTime[7] = {6, 0, 0, 0, 0, 0, 0};
+  14          u16 cur_value;
+  15          
+  16          void KeyDown(void);
+  17          void Display(void);
+  18          void Delay(u16 i);
+  19          
+  20          void timer0_init(void)
+  21          {
+  22   1          // TMOD &= 0xF0; // clear the last 4 bits
+  23   1          TMOD |= 0x01; // set the last 4 bits to 0001
+  24   1          TH0 = 0xd8;   // set the initial value of timer0
+  25   1          TL0 = 0xf0;
+  26   1          ET0 = 1; // enable timer0 interrupt
+  27   1          TR0 = 1; // start timer0
+  28   1          PT0 = 1;
+  29   1      }
+  30          
+  31          void timer0() interrupt 0
+  32          {
+  33   1          int sec = 0;
+  34   1          // TF0 = 0;
+  35   1      
+  36   1          mode = 1;
+  37   1          while (1)
+  38   1          {
+  39   2              if (TF0 == 1)
+  40   2              {
+  41   3                  TF0 = 0;
+  42   3                  TH0 = 0Xd8;
+  43   3                  TL0 = 0Xf0;
+  44   3                  sec++;
+  45   3                  if (sec >= 100)
+  46   3                  {
+  47   4                      sec = 0;
+  48   4                      KeyTime[6]--;
+  49   4                      if (KeyTime[6] < 0)
+  50   4                      {
+  51   5                          KeyTime[6] = 9;
+  52   5                          KeyTime[5]--;
+  53   5                          if (KeyTime[5] < 0)
+  54   5                          {
+C51 COMPILER V9.60.7.0   KEYBOARD                                                          05/11/2023 00:08:33 PAGE 2   
+
+  55   6                              KeyTime[5] = 5;
+  56   6                              KeyTime[4]--;
+  57   6                              if (KeyTime[4] < 0)
+  58   6                              {
+  59   7                                  KeyTime[4] = 9;
+  60   7                                  KeyTime[3]--;
+  61   7                                  if (KeyTime[3] < 0)
+  62   7                                  {
+  63   8                                      KeyTime[3] = 5;
+  64   8                                      KeyTime[2]--;
+  65   8                                      if (KeyTime[2] < 0)
+  66   8                                      {
+  67   9                                          KeyTime[2] = 9;
+  68   9                                          KeyTime[1]--;
+  69   9                                          if (KeyTime[1] < 0)
+  70   9                                              KeyTime[1] = 0;
+  71   9                                      }
+  72   8                                  }
+  73   7                              }
+  74   6                          }
+  75   5                      }
+  76   4                  }
+  77   3              }
+  78   2              if (!KeyTime[1] && !KeyTime[2] && !KeyTime[3] && !KeyTime[4] && !KeyTime[5] && !KeyTime[6])
+  79   2                  break;
+  80   2              Display();
+  81   2          }
+  82   1      }
+  83          
+  84          void main()
+  85          {
+  86   1          IT0 = 1; //
+  87   1          EX0 = 1; //
+  88   1          EA = 1;  //
+  89   1          PX0 = 0; //
+  90   1      
+  91   1          timer0_init();
+  92   1      
+  93   1          while (1)
+  94   1          {
+  95   2              Delay(100);
+  96   2              KeyDown();
+  97   2              Display();
+  98   2          }
+  99   1      }
+ 100          
+ 101          void Delay(u16 i)
+ 102          {
+ 103   1          while (i--)
+ 104   1              ;
+ 105   1      }
+ 106          
+ 107          void KeyDown(void)
+ 108          {
+ 109   1          // u16 keyboard[4][4] = {{7, 8, 9, 14},
+ 110   1          //                       {4, 5, 6, 13},
+ 111   1          //                       {1, 2, 3, 12},
+ 112   1          //                       {10, 0, 11, 15}};
+ 113   1          u16 keyboard[4][4] = {{1, 2, 3, 14},
+ 114   1                                {4, 5, 6, 13},
+ 115   1                                {7, 8, 9, 12},
+ 116   1                                {0, 10, 10, 11}};
+C51 COMPILER V9.60.7.0   KEYBOARD                                                          05/11/2023 00:08:33 PAGE 3   
+
+ 117   1          u8 i = 0, j = 0, k = 0;
+ 118   1          u8 temp;
+ 119   1          u16 modified_value;
+ 120   1          static u16 keydelay = 0;
+ 121   1      
+ 122   1          cur_value = KeyValue[3] + KeyValue[2] * 10 + KeyValue[1] * 100;
+ 123   1          P2 = 0x0f; // ����λ��1
+ 124   1          if (P2 != 0x0f)
+ 125   1          {
+ 126   2              Delay(1000);
+ 127   2              if (P2 != 0x0f)
+ 128   2              {
+ 129   3                  switch (P2)
+ 130   3                  {
+ 131   4                  case (0x07): // 0111
+ 132   4                      j = 0;
+ 133   4                      break;
+ 134   4                  case (0x0b): // 1011
+ 135   4                      j = 1;
+ 136   4                      break;
+ 137   4                  case (0x0d): // 1101
+ 138   4                      j = 2;
+ 139   4                      break;
+ 140   4                  case (0x0e): // 1110
+ 141   4                      j = 3;
+ 142   4                      break;
+ 143   4                  default:
+ 144   4                      break;
+ 145   4                  }
+ 146   3      
+ 147   3                  P2 = 0xf0; // ����λ��1
+ 148   3                  switch (P2)
+ 149   3                  {
+ 150   4                  case 0x70: // 0111
+ 151   4                      i = 0;
+ 152   4                      break;
+ 153   4                  case 0xb0: // 1011
+ 154   4                      i = 1;
+ 155   4                      break;
+ 156   4                  case 0xd0: // 1101
+ 157   4                      i = 2;
+ 158   4                      break;
+ 159   4                  case 0xe0: // 1110
+ 160   4                      i = 3;
+ 161   4                      break;
+ 162   4                  default:
+ 163   4                      break;
+ 164   4                  }
+ 165   3      
+ 166   3                  switch (mode)
+ 167   3                  {
+ 168   4                  case num_mode: // ����ģʽ
+ 169   4      
+ 170   4                      if (((i < 3) && (j < 3)) || (i == 3 && j == 0)) // [0~9]���ָı�
+ 171   4                      {
+ 172   5                          temp = KeyValue[KeyValue[0]];
+ 173   5                          KeyValue[KeyValue[0]] = keyboard[i][j];
+ 174   5      
+ 175   5                          modified_value = KeyValue[3] + KeyValue[2] * 10 + KeyValue[1] * 100;
+ 176   5      
+ 177   5                          // if (modified_value > 250 || modified_value < 20)
+ 178   5                          // {
+C51 COMPILER V9.60.7.0   KEYBOARD                                                          05/11/2023 00:08:33 PAGE 4   
+
+ 179   5                          //     KeyValue[KeyValue[0]] = temp;
+ 180   5                          // }
+ 181   5                          if (modified_value > 250)
+ 182   5                          {
+ 183   6                              KeyValue[1] = 2;
+ 184   6                              KeyValue[2] = 5;
+ 185   6                              KeyValue[3] = 0;
+ 186   6                          }
+ 187   5                          else if (modified_value < 20)
+ 188   5                          {
+ 189   6                              KeyValue[1] = 0;
+ 190   6                              KeyValue[2] = 2;
+ 191   6                              KeyValue[3] = 0;
+ 192   6                          }
+ 193   5                      }
+ 194   4      
+ 195   4                      else if (i == 3 && j == 3) // [RST] reset the temperature value
+ 196   4                      {
+ 197   5                          KeyValue[1] = 0;
+ 198   5                          KeyValue[2] = 2;
+ 199   5                          KeyValue[3] = 0;
+ 200   5                      }
+ 201   4      
+ 202   4                      else if (i == 2 && j == 3) // [NULL] do nothing
+ 203   4                      {
+ 204   5                          // beepprotect = ~beepprotect;
+ 205   5                      }
+ 206   4      
+ 207   4                      else if (i == 3 && j == 1) // [.] move the decimal point
+ 208   4                      {
+ 209   5                          Delay(20000);
+ 210   5                          KeyValue[0]--;
+ 211   5                          if (KeyValue[0] < 1)
+ 212   5                              KeyValue[0] = 3;
+ 213   5                      }
+ 214   4      
+ 215   4                      else if (i == 3 && j == 2) // [mode] modify the mode (num or time)
+ 216   4                      {
+ 217   5                          Delay(20000);
+ 218   5                          mode++;
+ 219   5                          if (mode > 1)
+ 220   5                              mode = 0;
+ 221   5                      }
+ 222   4      
+ 223   4                      else if (i == 0 && j == 3) // [++] plus
+ 224   4                      {
+ 225   5                          if (cur_value < 250)
+ 226   5                          {
+ 227   6                              Delay(50000);
+ 228   6                              if (keydelay > 5)
+ 229   6                              {
+ 230   7                                  k = 3;
+ 231   7                              }
+ 232   6                              else if (keydelay > 10)
+ 233   6                              {
+ 234   7                                  k = 5;
+ 235   7                              }
+ 236   6                              else
+ 237   6                              {
+ 238   7                                  k = 1;
+ 239   7                              }
+ 240   6                              KeyValue[3] += k;
+C51 COMPILER V9.60.7.0   KEYBOARD                                                          05/11/2023 00:08:33 PAGE 5   
+
+ 241   6                              if (KeyValue[3] > 9)
+ 242   6                              {
+ 243   7                                  KeyValue[3] = 0;
+ 244   7                                  KeyValue[2]++;
+ 245   7                                  if (KeyValue[2] > 9)
+ 246   7                                  {
+ 247   8                                      KeyValue[2] = 0;
+ 248   8                                      KeyValue[1]++;
+ 249   8                                  }
+ 250   7                              }
+ 251   6                          }
+ 252   5                          else if (cur_value >= 250)
+ 253   5                          {
+ 254   6                              KeyValue[1] = 2;
+ 255   6                              KeyValue[2] = 5;
+ 256   6                              KeyValue[3] = 0;
+ 257   6                          }
+ 258   5                          keydelay++;
+ 259   5                      }
+ 260   4      
+ 261   4                      else if (i == 1 && j == 3) // [--] sub
+ 262   4                      {
+ 263   5                          if (cur_value > 20)
+ 264   5                          {
+ 265   6                              Delay(50000);
+ 266   6                              if (keydelay > 5)
+ 267   6                              {
+ 268   7                                  k = 3;
+ 269   7                              }
+ 270   6                              else if (keydelay > 10)
+ 271   6                              {
+ 272   7                                  k = 5;
+ 273   7                              }
+ 274   6                              else
+ 275   6                              {
+ 276   7                                  k = 1;
+ 277   7                              }
+ 278   6                              KeyValue[3] -= k;
+ 279   6                              if (KeyValue[3] < 0)
+ 280   6                              {
+ 281   7                                  KeyValue[3] = 9;
+ 282   7                                  KeyValue[2]--;
+ 283   7                                  if (KeyValue[2] < 0)
+ 284   7                                  {
+ 285   8                                      KeyValue[2] = 9;
+ 286   8                                      KeyValue[1]--;
+ 287   8                                  }
+ 288   7                              }
+ 289   6                          }
+ 290   5                          else if (cur_value <= 20)
+ 291   5                          {
+ 292   6                              KeyValue[1] = 0;
+ 293   6                              KeyValue[2] = 2;
+ 294   6                              KeyValue[3] = 0;
+ 295   6                          }
+ 296   5                          keydelay++;
+ 297   5                      }
+ 298   4                      break;
+ 299   4      
+ 300   4                  case time_mode:
+ 301   4      
+ 302   4                      if (((i < 3) && (j < 3)) || (i == 3 && j == 0))
+C51 COMPILER V9.60.7.0   KEYBOARD                                                          05/11/2023 00:08:33 PAGE 6   
+
+ 303   4                      {
+ 304   5                          if (KeyTime[0] != 3 && KeyTime[0] != 5)
+ 305   5                              KeyTime[KeyTime[0]] = keyboard[i][j];
+ 306   5                          else if (i > 1 || j == 0 || j == 1)
+ 307   5                              KeyTime[KeyTime[0]] = keyboard[i][j];
+ 308   5                      }
+ 309   4      
+ 310   4                      else if (i == 3 && j == 1)
+ 311   4                      {
+ 312   5                          Delay(20000);
+ 313   5                          KeyTime[0]--;
+ 314   5                          if (KeyTime[0] < 1)
+ 315   5                              KeyTime[0] = 6;
+ 316   5                      }
+ 317   4      
+ 318   4                      else if (i == 3 && j == 3)
+ 319   4                      {
+ 320   5                          k = 0;
+ 321   5                          for (k = 1; k <= 6; k++)
+ 322   5                              KeyTime[k] = 0;
+ 323   5                      }
+ 324   4      
+ 325   4                      else if (i == 3 && j == 2)
+ 326   4                      {
+ 327   5                          Delay(20000);
+ 328   5                          mode++;
+ 329   5                          if (mode > 1)
+ 330   5                              mode = 0;
+ 331   5                      }
+ 332   4      
+ 333   4                      // else if (i == 2 && j == 3)
+ 334   4                      // {
+ 335   4                      //     TH0 = 0xd8; // set the initial value of timer0
+ 336   4                      //     TL0 = 0xf0;
+ 337   4                      // }
+ 338   4      
+ 339   4                      // else if (i == 0 && j == 3)
+ 340   4                      // {
+ 341   4                      //     TF0 = 1;
+ 342   4                      // }
+ 343   4                      break;
+ 344   4                  }
+ 345   3              }
+ 346   2          }
+ 347   1          else
+ 348   1          {
+ 349   2              keydelay = 0;
+ 350   2          }
+ 351   1      }
+ 352          
+ 353          void Display(void)
+ 354          {
+ 355   1          u8 i;
+ 356   1          switch (mode)
+ 357   1          {
+ 358   2          case num_mode:
+ 359   2              for (i = 0; i < 8; i++)
+ 360   2              {
+ 361   3                  P0 = i;
+ 362   3                  if (i == 0)
+ 363   3                  {
+ 364   4                      P1 = smgduan[mode];
+C51 COMPILER V9.60.7.0   KEYBOARD                                                          05/11/2023 00:08:33 PAGE 7   
+
+ 365   4                  }
+ 366   3                  else if (i != KeyValue[0] + 4)
+ 367   3                      P1 = smgduan[KeyValue[i - 4]];
+ 368   3                  else
+ 369   3                      P1 = smgduan[KeyValue[i - 4]] + 128;
+ 370   3                  Delay(100);
+ 371   3                  P1 = 0;
+ 372   3                  if (i == 0)
+ 373   3                      i = i + 4;
+ 374   3              }
+ 375   2              break;
+ 376   2      
+ 377   2          case time_mode:
+ 378   2              for (i = 0; i < 8; i++)
+ 379   2              {
+ 380   3                  P0 = i;
+ 381   3                  if (i == 0)
+ 382   3                  {
+ 383   4                      P1 = smgduan[mode];
+ 384   4                  }
+ 385   3                  else if (i != KeyTime[0] + 1)
+ 386   3                      P1 = smgduan[KeyTime[i - 1]];
+ 387   3                  else
+ 388   3                      P1 = smgduan[KeyTime[i - 1]] + 128;
+ 389   3                  Delay(100);
+ 390   3                  P1 = 0;
+ 391   3                  if (i == 0)
+ 392   3                      i = i + 1;
+ 393   3              }
+ 394   2              break;
+ 395   2          }
+ 396   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1539    ----
+   CONSTANT SIZE    =     49    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     27      38
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

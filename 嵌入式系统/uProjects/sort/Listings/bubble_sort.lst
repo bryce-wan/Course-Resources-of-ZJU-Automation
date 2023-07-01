@@ -1,0 +1,45 @@
+C51 COMPILER V9.60.7.0   BUBBLE_SORT                                                       04/11/2023 13:25:17 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE BUBBLE_SORT
+OBJECT MODULE PLACED IN .\Objects\bubble_sort.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE bubble_sort.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\bubble_sort.lst) TABS(2) OBJECT(.\Objects\bubble_sort.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          
+   3          void main(void)
+   4          {
+   5   1          unsigned char data A[15] = {27, 5, 32, 47, 38, 235, 79, 17, 187, 58, 23, 35, 211, 104, 9};
+   6   1      
+   7   1          unsigned int data i = 0, j = 0;
+   8   1      
+   9   1          for (i = 0; i < 15; i++)
+  10   1          {
+  11   2              for (j = i + 1; j < 15; j++)
+  12   2              {
+  13   3                  if (A[i] > A[j])
+  14   3                  {
+  15   4                      A[j] = A[j] + A[i];
+  16   4                      A[i] = A[j] - A[i];
+  17   4                      A[j] = A[j] - A[i];
+  18   4                  }
+  19   3              }
+  20   2          }
+  21   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    120    ----
+   CONSTANT SIZE    =     15    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      15
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

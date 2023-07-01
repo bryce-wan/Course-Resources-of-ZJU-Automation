@@ -1,0 +1,19 @@
+；假定这个空调是在制冷状态运行的
+ORG 0000H
+AJMP MAIN
+ORG 0030H
+
+MAIN:
+MOV A P1			;把P1放入累加器
+CJNE A,R1,bitset		；如果A和R1不等，那么跳转到bitset进行调整
+AJMP MAIN			；如果A和R1相等，回到MAIN，循环进行判断
+
+bitset：
+JC stop			；如果CY = 0，也就是A比R1大，也就是外面温度大于设定温度，那么需要开启制冷（顺序执行）
+SETB P2.1 		     ；开启制冷
+AJMP MAIN
+
+stop：			；如果CY = 1，那么外面温度小于设定温度，空调停止工作
+CLR P2.1
+AJMP MAIN
+

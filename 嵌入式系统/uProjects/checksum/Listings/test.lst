@@ -1,0 +1,68 @@
+A51 MACRO ASSEMBLER  TEST                                                                 04/10/2023 00:09:33 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\test.obj
+ASSEMBLER INVOKED BY: D:\Keil_v5\C51\BIN\A51.EXE test.a51 SET(SMALL) DEBUG PRINT(.\Listings\test.lst) OBJECT(.\Objects\t
+                      est.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+  003F                 1                     MIN     EQU     3FH
+                       2                             
+0000                   3                     ORG             0000H
+0000 020100            4                     LJMP    MAIN
+                       5                     
+0030                   6                     ORG     0030H
+0030 1B05202F          7     TABLE:  DB              27,5,32,47,38,235,79,17,187,58,23,35,211,104,9
+0034 26EB4F11                
+0038 BB3A1723                
+003C D36809                  
+                       8             
+0100                   9                     ORG             0100H
+0100 7830             10     MAIN:   MOV     R0,#30H                 ;?????
+0102 900000           11                     MOV             DPTR,#00H
+                      12     
+0105 E8               13     AGAIN:  MOV             A,R0
+0106 93               14                     MOVC    A,@A+DPTR               ;?ROM????A+DPTR?????A
+0107 F6               15                     MOV             @R0,A                   ;?A?????RAM????R0
+0108 08               16                     INC             R0
+0109 B83FF9           17                     CJNE    R0,#3FH,AGAIN
+010C 02010F           18                     LJMP    FIND
+                      19                     
+010F 7830             20     FIND:   MOV             R0,#30H
+0111 863F             21                     MOV             MIN,@R0                 ;????????MIN
+0113 08               22                     INC             R0
+                      23                     
+0114 E6               24     LOOP:   MOV             A,@R0
+0115 C3               25                     CLR             C
+0116 953F             26                     SUBB    A,MIN
+0118 5002             27                     JNC             NEXT                    ;????????,(A)>(MIN),???
+011A 863F             28                     MOV             MIN,@R0
+                      29                     
+011C 08               30     NEXT:   INC             R0
+011D B83FF4           31                     CJNE    R0,#3FH,LOOP
+                      32     
+0120 80FE             33                     SJMP    $
+                      34                     END
+A51 MACRO ASSEMBLER  TEST                                                                 04/10/2023 00:09:33 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+AGAIN. . . . . . .  C ADDR   0105H   A   
+FIND . . . . . . .  C ADDR   010FH   A   
+LOOP . . . . . . .  C ADDR   0114H   A   
+MAIN . . . . . . .  C ADDR   0100H   A   
+MIN. . . . . . . .  N NUMB   003FH   A   
+NEXT . . . . . . .  C ADDR   011CH   A   
+TABLE. . . . . . .  C ADDR   0030H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

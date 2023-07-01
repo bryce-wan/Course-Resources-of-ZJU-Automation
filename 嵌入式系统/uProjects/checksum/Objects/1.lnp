@@ -1,0 +1,3 @@
+".\Objects\checksum.obj" 
+TO ".\Objects\1" 
+PRINT(".\Listings\1.m51")
