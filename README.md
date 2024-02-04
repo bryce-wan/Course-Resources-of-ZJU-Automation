@@ -1,2 +1,2 @@
-# CourseMaterials_ZJUCSE
-主要是控制自动化的课，还有一些计院和工高的课程。
+# course-materials-of-ZJU-automation
+主要是控制学院自动化的课，还有一些计院和工高的课程。
