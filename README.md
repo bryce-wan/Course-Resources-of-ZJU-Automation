@@ -1,2 +1,2 @@
 # course-materials-of-ZJU-automation
-主要是控制学院自动化的课，还有一些计院和工高的课程。
+A collection of course materials, resources, and personal implementations from the Control Science and Engineering at Zhejiang University. Additionally, some elective course materials from other disciplines that I found valuable are included.
